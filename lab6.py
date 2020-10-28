@@ -13,17 +13,17 @@ while True:
     print("|  7. Exit \t|")
     print("|===============|")
     print("| Current list: ", numbers)
-    for index, number in numbers:
-        print("\t", index + 1, ")" ,number)
+
+    for index, number in enumerate(numbers):
+        print("\t", index + 1, ")", number)
     print("|===============| \n")
-    
 
     action = int(input('enter which action: '))
 
     if 1 == action:
         new = float(input("enter the new number: "))
         position = int(input("enter its the position: "))
-        numbers.insert(position, new)      
+        numbers.insert(position, new)
     if 2 == action:
         position = int(input("enter the position of the number to remove: "))
         numbers.remove(position)
@@ -39,7 +39,6 @@ while True:
                 mini = index
         print("Max value: ", maxi)
         print("Min value: ", maxi)
-        
-    
+
     if 8 == action:
         break

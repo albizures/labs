@@ -1,12 +1,12 @@
 from math import inf
 start = 1.4
 end = 2.2
-step= 0.025
+step = 0.025
 
 y = start
 
 biggestD = -inf
-smallestD = inf 
+smallestD = inf
 
 ds = []
 
@@ -44,19 +44,18 @@ for index in range(0, steps + 1):
         lineHeader += '|'
     else:
         lineHeader += '-'
-    
+
 
 for i, d in enumerate(ds):
     for index, num in enumerate(points):
         nextNum = smallestD + dStep * (index + 1)
         if d >= num and d <= nextNum:
             padding = ' ' * (index - 1)
-            values = "{}{:1.3f}\t|{}x\n".format(values, start + i * step, padding)
-            break;
-        
+            values = "{}{:1.3f}\t|{}x\n".format(
+                values, start + i * step, padding)
+            break
+
 
 print(numberHeader)
 print(lineHeader + '-> y')
 print(values + '\t˅\n\tx')
-
-    
