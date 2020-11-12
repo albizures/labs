@@ -1,7 +1,7 @@
 from math import inf
-start = 1.4
-end = 2.2
-step = 0.025
+start = int(input("start: "))
+end = int(input("end: "))
+step = int(input("step: "))
 
 y = start
 
@@ -10,13 +10,13 @@ smallestD = inf
 
 ds = []
 
-print(" ------- -------")
-print("|   y   |   d   |")
-print(" ------- -------")
+print(" ---------------------------- "*2)
+print("|\ty\t|\td\t|")
+print(" ---------------------------- "*2)
 
 while y <= end:
     d = y**5 - 7.9 * y**4 + 24.49 * y**3 - 37.074 * y**2 + 27.512 * y - 8.0042
-    print("| {:2.3f} | {:2.3f} |".format(y, d))
+    print("|{:^30f}|{:^30:1.3f}|".format(y, d))
     ds.append(d)
     if d > biggestD:
         biggestD = d
@@ -24,7 +24,7 @@ while y <= end:
         smallestD = d
     y += step
 
-print(" ------- -------\n")
+print(" -----------------------------"*2, '\n')
 
 dRange = abs(biggestD - smallestD)
 steps = 60
@@ -50,8 +50,8 @@ for i, d in enumerate(ds):
     for index, num in enumerate(points):
         nextNum = smallestD + dStep * (index + 1)
         if d >= num and d <= nextNum:
-            padding = ' ' * (index - 1)
-            values = "{}{:1.3f}\t|{}x\n".format(
+            padding = ' ' * index
+            values = "{}{:1.3f}\t|{}*\n".format(
                 values, start + i * step, padding)
             break
 
