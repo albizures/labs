@@ -1,7 +1,7 @@
 from math import inf
-start = int(input("start: "))
-end = int(input("end: "))
-step = int(input("step: "))
+start = float(input("start: "))
+end = float(input("end: "))
+step = float(input("step: "))
 
 y = start
 
@@ -10,13 +10,13 @@ smallestD = inf
 
 ds = []
 
-print(" ---------------------------- "*2)
-print("|\ty\t|\td\t|")
-print(" ---------------------------- "*2)
+print(" ----------------------"*2)
+print("|{:^22}|{:^22}|".format("y", "d"))
+print(" ----------------------"*2)
 
 while y <= end:
     d = y**5 - 7.9 * y**4 + 24.49 * y**3 - 37.074 * y**2 + 27.512 * y - 8.0042
-    print("|{:^30f}|{:^30:1.3f}|".format(y, d))
+    print("|{:^22.4f}|{:^22.4f}|".format(y, d))
     ds.append(d)
     if d > biggestD:
         biggestD = d
@@ -24,14 +24,14 @@ while y <= end:
         smallestD = d
     y += step
 
-print(" -----------------------------"*2, '\n')
+print(" ----------------------"*2, '\n')
 
 dRange = abs(biggestD - smallestD)
-steps = 60
+steps = 80
 markEach = steps // 4
 dStep = dRange / steps
-numberHeader = '\t'
-lineHeader = '\t'
+numberHeader = '{:^7}'.format("")
+lineHeader = '{:^11}'.format("")
 values = ''
 points = []
 
@@ -39,7 +39,7 @@ for index in range(0, steps + 1):
     num = smallestD + dStep * index
     points.append(num)
     if index % markEach == 0:
-        sNum = '{:1.3f}'.format(num)
+        sNum = '{:^10.1f}'.format(num)
         numberHeader += sNum + (' ' * (markEach - len(sNum)))
         lineHeader += '|'
     else:
@@ -51,11 +51,11 @@ for i, d in enumerate(ds):
         nextNum = smallestD + dStep * (index + 1)
         if d >= num and d <= nextNum:
             padding = ' ' * index
-            values = "{}{:1.3f}\t|{}*\n".format(
+            values = "{}{:>10.3f} |{}*\n".format(
                 values, start + i * step, padding)
             break
 
 
 print(numberHeader)
 print(lineHeader + '-> y')
-print(values + '\t˅\n\tx')
+print(values + '{:>12}\n{:>12}'.format("˅", "x"))
