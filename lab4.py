@@ -1,3 +1,7 @@
+# Альбисурес дель Валье Хосе Альфредо
+# ИУ7-15Б
+# четвертая лаборатория
+
 from math import inf
 start = float(input("start: "))
 end = float(input("end: "))

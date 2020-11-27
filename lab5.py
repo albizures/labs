@@ -1,14 +1,41 @@
-value = float(input("Value: "))
-steps = int(input("steps: "))
+# Альбисурес дель Валье Хосе Альфредо
+# ИУ7-15Б
+# пятая лаборатория
 
-print(" ---------------" * 3)
-print("|\tN\t|\tt\t|\ts\t|")
-print(" ---------------" * 3)
+x = float(input("Enter X: "))
+iteration = int(input("Enter the iteration: "))
+eps = float(input("Enter eps: "))
+step = int(input("Enter the step: "))
 
-sum = 0
-for i in range(0, steps):
-    current = value ** i
-    sum += current * (1 if i % 2 == 0 else -1)
-    print("|\t{}\t|\t{}\t|\t{}\t|".format(i + 1, current, sum))
 
-print(" ---------------" * 3)
+divider = " ----------------" * 3
+
+print(divider)
+print("|{:^16}|{:^16}|{:^16}|".format("N", "t", "s"))
+print(divider)
+
+summa = 0
+index = 0
+iter_control = 0
+
+while True:
+    value = (-x) ** index
+    summa += value
+
+    if iter_control == index:
+        if abs(value) > 10e+4:
+            print("|{:^16}|{:^16.3e}|{:^16.3e}|".format(index + 1, round(value, 3), round(summa, 3)))
+        else:
+            print("|{:^16}|{:^16}|{:^16}|".format(index + 1, round(value, 3), round(summa, 3)))
+        iter_control += step
+
+    index += 1
+
+    if abs(value) < eps:
+        print(divider)
+        print('the sequence converged in {} iteration.'.format(index))
+        break
+    if index > iteration:
+        print(divider)
+        print('the sequence didn\'t converge in {} iteration.'.format(iteration))
+        break
