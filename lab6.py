@@ -1,27 +1,39 @@
+# Альбисурес дель Валье Хосе Альфредо
+# ИУ7-15Б
+# шестая лаборатория
 
 items = input("Initialize the list: ").split()
-space = "|\t\t\t\t\t|"
+listOfNumber = True
+numbers = []
+
+space = "|{:<39}|".format("")
+vowels = 'aeiou'
 
 while True:
     print("|== Current list =======================|")
     print(space)
     for index, item in enumerate(items):
-        print("|    {}) {} \t\t\t\t|".format(index + 1, item))
+        print("|    {}) {:<32}|".format(index + 1, item))
     print(space)
     print("|== Menu ===============================|")
     print(space)
-    print("|  1. Add an item\t\t\t|")
-    print("|  2. Remove an item\t\t\t|")
-    print("|  3. Clear list\t\t\t|")
-    print("|  4. Find the max and min values\t|")
-    print("|  5. Something\t\t\t|")
-    print("|  6. Find rows with fewer vowels\t|")
-    print("|  7. Exit \t\t\t\t|")
+    print("|  {:<37}|".format('1. Add an item'))
+    print("|  {:<37}|".format('2. Remove an item'))
+    print("|  {:<37}|".format('3. Clear list'))
+    print("|  {:<37}|".format('4. Find the max and min values'))
+    print("|  {:<37}|".format('5. Prime negative numbers'))
+    print("|  {:<37}|".format('6. Find string with fewer vowels'))
+    print("|  {:<37}|".format('7. Exit'))
     print(space)
     print("|=======================================|\n")
 
     action = int(input('> Enter which action you want to perform: '))
     length = len(items)
+
+    try:
+        numbers = list(map(int, items))
+    except:
+        listOfNumber = False
 
     if action == 7:
         print("Exiting the program")
@@ -41,7 +53,7 @@ while True:
             if position < 0 or position > length:
                 print("**The position is invalid**")
             else:
-                items.remove(position)
+                del items[position - 1]
                 break
 
     elif 3 == action:
@@ -51,27 +63,54 @@ while True:
     elif length <= 0:
         print("**The list is empty**")
         input("> Enter to continue")
-    elif 4 == action: 
+    elif 4 == action:
         maxi = 0
         mini = 0
-        try:
-            for index, item in enumerate(items):
-                number = float(item)
-                if item > items[maxi]:
+
+        if listOfNumber:
+            for index, number in enumerate(numbers):
+                if number > numbers[maxi]:
                     maxi = index
-                if item < items[mini]:
+                if number < numbers[mini]:
                     mini = index
-                print("Max value: ", items[maxi])
-                print("Min value: ", items[mini])
-        except:
+            print("Max value: ", numbers[maxi])
+            print("Min value: ", numbers[mini])
+        else:
+            print("**It is not a list of only numbers**")
+
+        input("> Enter to continue")
+    elif 5 == action:
+        if listOfNumber:
+            primeNumbers = []
+            for number in numbers:
+                if number > 0:
+                    continue
+                num = abs(number)
+                if num > 1:
+                    isPrime = True
+                    for i in range(2, num//2 + 1):
+                        if (num % i) == 0:
+                            isPrime = False
+                            break
+                    if isPrime:
+                        primeNumbers.append(number)
+                else:
+                    primeNumbers.append(number)
+            print(primeNumbers)
+        else:
             print("**It is not a list of only numbers**")
         input("> Enter to continue")
-
-    elif 5 == action:
-        print("lelele")
-        input("> Enter to continue")
     elif 6 == action:
-        print("werrwerwer")
+        withLessVowels = []
+        for item in items:
+            vowelCounter = 0
+            for char in item:
+                if char in vowels:
+                    vowelCounter += 1
+            consonantsCounter = len(item) - vowelCounter
+            if consonantsCounter < vowelCounter:
+                withLessVowels.append(item)
+        print(withLessVowels)
         input("> Enter to continue")
     else:
         print("**Invalid action**")
