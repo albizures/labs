@@ -63,7 +63,7 @@ lineHeader += '> y'
 for value in values:
     y = value['y']
     d = value['d']
-    rows = values = "{}{:>10.3f} ".format(rows, y)
+    rows = "{}{:>10.3f} ".format(rows, y)
     for index, point in enumerate(points):
         if len(points) - 1 != index:
             nextPoint = points[index + 1]

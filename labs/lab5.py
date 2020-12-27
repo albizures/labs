@@ -24,9 +24,9 @@ while True:
 
     if iter_control == index:
         if abs(value) > 10e+4:
-            print("|{:^16}|{:^16.3e}|{:^16.3e}|".format(index + 1, round(value, 3), round(summa, 3)))
+            print("|{:^16}|{:^16.3e}|{:^16.3e}|".format(index + 1, value, summa))
         else:
-            print("|{:^16}|{:^16}|{:^16}|".format(index + 1, round(value, 3), round(summa, 3)))
+            print("|{:^16}|{:^16}|{:^16}|".format(index + 1, value, summa))
         iter_control += step
 
     index += 1
