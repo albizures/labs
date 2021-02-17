@@ -127,7 +127,7 @@ while True:
 
         print_results(
             field_names,
-            search_in_db(read_data(pathname), [field, search])
+            search_in_db(read_data(pathname), [[field, search]])
         )
     elif option == '5':
         query = []

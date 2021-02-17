@@ -1,5 +1,3 @@
-# Альбисурес дель Валье Хосе Альфредо
-# ИУ7-15Б
 
 # Лабораторная работа №9
 # Написать программу, реализующую меню:
@@ -36,12 +34,11 @@ encrypted = ''
 
 while True:
     print('''
-    ===========================
-    1. Enter a line encrypt.
-    2. Enter cipher key
-    3. Encrypt line
-    4. Decrypt the string
-    5. Exit
+    1) Enter a line encrypt.
+    2) Enter cipher key
+    3) Encrypt line
+    4) Decrypt the string
+    5) Exit
     ''')
 
     option = input('> Enter action to perform: ')

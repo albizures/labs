@@ -1,4 +1,6 @@
-
+# Альбисурес дель Валье Хосе Альфредо
+# ИУ7-15Б
+# практика
 
 in_file = open('in.txt', 'r')
 out_file = open('out.txt', 'w')
@@ -27,18 +29,7 @@ def is_palindrome(word):
     return True
 
 
-# def is_paliword(word):
-#     counter = 0
-#     parts = get_word_parts(word)
-#     print(parts)
-#     for part in parts:
-#         if len(part) > 2 and is_palindrome(part):
-#             counter += 1
-
-#     return counter > 1
-
-
-def is_paliword(word):
+def is_palinword(word):
     length = len(word)
     palindromes = []
 
@@ -70,7 +61,7 @@ def is_paliword(word):
 
 for line in lines:
     for word in line.split(' '):
-        if is_paliword(word):
+        if is_palinword(word):
             out_words.append(word)
 
 

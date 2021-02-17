@@ -7,5 +7,31 @@
   "python.testing.unittestArgs": ["-v", "-s", ".", "-p", "*_test.py"],
   "python.testing.pytestEnabled": false,
   "python.testing.nosetestsEnabled": false,
-  "python.testing.unittestEnabled": true
+"python.testing.unittestEnabled": true,
+"files.associations": {
+    "array": "cpp",
+    "deque": "cpp",
+    "string": "cpp",
+    "vector": "cpp",
+    "iterator": "cpp",
+    "string_view": "cpp",
+    "optional": "cpp",
+    "istream": "cpp",
+    "ostream": "cpp",
+    "ratio": "cpp",
+    "system_error": "cpp",
+    "functional": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "utility": "cpp",
+    "bitset": "cpp",
+    "initializer_list": "cpp",
+    "ranges": "cpp",
+    "*.tcc": "cpp",
+    "typeinfo": "cpp",
+    "unordered_map": "cpp",
+    "chrono": "cpp",
+    "random": "cpp",
+    "limits": "cpp"
+}
 }
