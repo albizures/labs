@@ -17,6 +17,28 @@ def to_base5(num):
     return result
 
 
+def to_base10(num):
+    result = 0
+    str_num = str(num)
+    index = str_num.find('.')
+    if index == -1:
+        index = len(str_num)
+    for char in str_num:
+        if char == '.':
+            continue
+        index -= 1
+        result += int(char) * 5**index
+    return result
+
+
+def is_operation(operation):
+    return isinstance(operation, str) and operation in '+-/*'
+
+
+def is_dot(operation):
+    return isinstance(operation, str) and operation == '.'
+
+
 class Btn(ttk.Button):
     def __init__(self, master=None, label=0, row_index=0, col_index=0, span=1):
         super().__init__(master=master, text=label, style='black/white.TButton')
@@ -25,11 +47,13 @@ class Btn(ttk.Button):
     def attach(self, on_click):
         self.bind('<Button>', on_click)
 
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Calculator")
         self.bind('<Escape>', self.quit)
+        self.last_input = None
 
         self.init_ui()
         self.init_menus()
@@ -75,12 +99,11 @@ class App(tk.Tk):
 
     def init_menus(self):
         menubar = tk.Menu(self)
-    
+
         self.config(menu=menubar)
-    
+
         menu_app = tk.Menu(menubar)
         menu_actions = tk.Menu(menubar)
-
 
         menu_app.add_command(label="About", command=self.show_info)
         menu_app.add_command(label="Exit", command=self.quit)
@@ -102,22 +125,38 @@ class App(tk.Tk):
 
     def change_handler(self, value):
         input_text = self.input_entry.get()
+        final_input_value = input_text
+
+        if is_operation(value):
+            if is_operation(self.last_input) or not input_text.strip():
+                return
+
+        if is_dot(value):
+            if is_dot(self.last_input) or not input_text.strip():
+                return
+
         if str(value) in '+-/*0123456789.':
             self.clear_input()
-            self.input_entry.insert(0, input_text + str(value))
+            final_input_value = input_text + str(value)
         elif value == 'AC':
             self.clear_input()
         elif value == '=':
             self.clear_input()
-            self.input_entry.insert(0, str(eval(input_text)))
-        elif value == 'base5':
+            final_input_value = str(eval(input_text))
+
+        if value == 'base5' or value == 'base10':
             if len(input_text.strip()) == 0:
                 messagebox.showerror("Error", "Nothing to convert")
                 return
-            self.clear_input()
-            print(input_text, to_base5(eval(input_text)))
-            self.input_entry.insert(0, to_base5(eval(input_text)))
 
+        if value == 'base5':
+            final_input_value = to_base5(eval(input_text))
+        elif value == 'base10':
+            final_input_value = str(to_base10(eval(input_text)))
+
+        self.last_input = value
+        self.clear_input()
+        self.input_entry.insert(0, final_input_value)
 
     def on_click(self, value):
         def event_handler(event):
@@ -129,8 +168,8 @@ class App(tk.Tk):
         self.destroy()
 
 
-def main():    
-   App()
+def main():
+    App()
 
 
 if __name__ == '__main__':
