@@ -1,3 +1,4 @@
+import math
 import tkinter as tk
 from tkinter import ttk, messagebox
 import tkinter.font as tfont
@@ -9,11 +10,35 @@ about_message = """Эта программа позволяет выполнят
 """
 
 
-def to_base5(num):
+def get_number_parts(num):
+    decimals = 0
+    str_num = str(num)
+    if '.' in str_num:
+        num, decimals = map(int, str(num).split('.'))
+        decimals = decimals / 10
+    return num, decimals
+
+
+def to_base5(raw_num):
     result = ""
+    str_num = str(raw_num)
+    num, decimals = get_number_parts(raw_num)
     while num:
         result = str(num % 5) + result
+
         num //= 5
+    if decimals > 0:
+        result += '.'
+
+    counter = 0
+    while decimals:
+        decimals *= 5
+        num, decimals = get_number_parts(decimals)
+        result = result + str(num)
+        counter += 1
+        if counter > 5:
+            break
+
     return result
 
 
@@ -63,7 +88,6 @@ class App(tk.Tk):
         self.mainloop()
 
     def init_ui(self):
-        # String var for the input entry
         self.string_var = tk.StringVar()
         self.string_var.trace('w', self.validate)
 
@@ -115,10 +139,21 @@ class App(tk.Tk):
 
     def validate(self, *args):
         corrected = ''.join(filter(lambda c: c in '+-/*0123456789.', self.string_var.get()))
+
+        length = len(corrected)
+        if length > 1:
+            last = corrected[length - 1]
+            second_last = corrected[length - 2]
+            if (is_operation(last) and is_operation(second_last)) or (is_dot(last) and is_dot(second_last)):
+                corrected = corrected[0: -1]
+        elif is_operation(corrected):
+            corrected = ''
+
+        print(corrected)
         self.string_var.set(corrected)
 
     def clear_input(self):
-        self.input_entry.delete(0, 'end')
+        self.string_var.set('')
 
     def show_info(self):
         messagebox.showinfo("About", about_message)
@@ -140,7 +175,10 @@ class App(tk.Tk):
             final_input_value = input_text + str(value)
         elif value == 'AC':
             self.clear_input()
+            return
         elif value == '=':
+            if not input_text.strip():
+                return
             self.clear_input()
             final_input_value = str(eval(input_text))
 
@@ -156,7 +194,7 @@ class App(tk.Tk):
 
         self.last_input = value
         self.clear_input()
-        self.input_entry.insert(0, final_input_value)
+        self.string_var.set(final_input_value)
 
     def on_click(self, value):
         def event_handler(event):
