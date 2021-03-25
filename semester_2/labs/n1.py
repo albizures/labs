@@ -4,18 +4,28 @@ from tkinter import ttk, messagebox
 import tkinter.font as tfont
 import sys
 
-about_message = """Эта программа позволяет выполнять основные математические операции и преобразовывать результат в 5-ю и обратно
+about_message = """
+Эта программа позволяет выполнять основные математические операции и преобразовывать результат в 5-ю и обратно
 Автор: Альбисурес дель валье Хосе Алфредо
 Группа: ИУ7-25б
 """
 
 
+def safe_eval(value):
+    try:
+        return True, eval(value)
+    except:
+        return False, ""
+
+
 def get_number_parts(num):
     decimals = 0
     str_num = str(num)
+
     if '.' in str_num:
-        num, decimals = map(int, str(num).split('.'))
+        num, decimals = map(int, str_num.split('.'))
         decimals = decimals / 10
+
     return num, decimals
 
 
@@ -23,6 +33,7 @@ def to_base5(raw_num):
     result = ""
     str_num = str(raw_num)
     num, decimals = get_number_parts(raw_num)
+
     while num:
         result = str(num % 5) + result
 
@@ -57,7 +68,7 @@ def to_base10(num):
 
 
 def is_operation(operation):
-    return isinstance(operation, str) and operation in '+-/*'
+    return isinstance(operation, str) and operation in '+/*'
 
 
 def is_dot(operation):
@@ -83,8 +94,8 @@ class App(tk.Tk):
         self.init_ui()
         self.init_menus()
 
-        self.after(1, lambda: self.focus_force())
-        self.lift()
+        # self.after(1, lambda: self.focus_force())
+        # self.lift()
         self.mainloop()
 
     def init_ui(self):
@@ -144,12 +155,13 @@ class App(tk.Tk):
         if length > 1:
             last = corrected[length - 1]
             second_last = corrected[length - 2]
+            # checking if there are two operations or dots together
             if (is_operation(last) and is_operation(second_last)) or (is_dot(last) and is_dot(second_last)):
                 corrected = corrected[0: -1]
         elif is_operation(corrected):
+            # an operation cannot be the only element in the input
             corrected = ''
 
-        print(corrected)
         self.string_var.set(corrected)
 
     def clear_input(self):
@@ -161,12 +173,18 @@ class App(tk.Tk):
     def change_handler(self, value):
         input_text = self.input_entry.get()
         final_input_value = input_text
+        success = True
 
         if is_operation(value):
-            if is_operation(self.last_input) or not input_text.strip():
+            if is_operation(self.last_input):
+                # avoid adding extra operations
                 return
+            if not input_text.strip():
+                if value != '-':
+                    return
 
         if is_dot(value):
+            # two dots together
             if is_dot(self.last_input) or not input_text.strip():
                 return
 
@@ -180,7 +198,7 @@ class App(tk.Tk):
             if not input_text.strip():
                 return
             self.clear_input()
-            final_input_value = str(eval(input_text))
+            success, final_input_value = safe_eval(input_text)
 
         if value == 'base5' or value == 'base10':
             if len(input_text.strip()) == 0:
@@ -188,13 +206,18 @@ class App(tk.Tk):
                 return
 
         if value == 'base5':
-            final_input_value = to_base5(eval(input_text))
+            success, final_input_value = safe_eval(input_text)
+            final_input_value = to_base5(final_input_value)
         elif value == 'base10':
-            final_input_value = str(to_base10(eval(input_text)))
+            success, final_input_value = safe_eval(input_text)
+            final_input_value = to_base10(final_input_value)
 
-        self.last_input = value
-        self.clear_input()
-        self.string_var.set(final_input_value)
+        if success:
+            self.last_input = value
+            self.clear_input()
+            self.string_var.set(str(final_input_value))
+        else:
+            messagebox.showerror("Error", "The input is invalid")
 
     def on_click(self, value):
         def event_handler(event):
