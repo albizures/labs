@@ -7,27 +7,45 @@ import numpy as np
 
 
 def f(x):
-    return x**3 + x**2 - 4 * x
+    return math.sin(x)
 
 
-def df(x):
-    return 3 * x**2 + 2 * x - 4
+def d2f(x):
+    return -math.sin(x)
+
+
+def steff_by_steps(f, a, b, eps, steps):
+    step = (b - a) / steps
+    x1 = a
+    while (x1 <= b):
+        x2 = x1 + step
+        f1 = f(x1)
+        f2 = f(x2)
+        if f1 * f2 <= 0:
+            result = steff(f, x1, x2, eps)
+            if result == None:
+                break
+
+            x, fx, counter = result
+            return str(x), f"({x1};{x2})", str(x1), str(fx), str(counter), '',
+        x1 = x2
+    return '', "", "", "", "", 'Not found',
 
 
 def steff(f, a, b, eps):
-    x = b
+    x = a
     counter = 0
-    while a < x:
+    while True:
+        counter += 1
         fx = f(x)
 
-        if fx == 0 or abs(fx) < eps:
-            return str(x), f"({a};{b})", str(x), str(fx), str(counter), '',
+        if(abs(fx) < eps):
+            return x, fx, counter
 
-        gx = f(x + fx) / fx - 1
-        x = x - (fx / gx)
-        counter += 1
-    else:
-        return '', f"({a};{b})", str(x), str(fx), str(counter), 'Not found',
+        x -= (fx**2) / (f(x + fx) - fx)
+
+        if x >= b:
+            return None
 
 
 class App(tk.Tk):
@@ -48,9 +66,9 @@ class App(tk.Tk):
         return value
 
     def init_ui(self):
-        self.start_point = tk.StringVar(value="-3")
+        self.start_point = tk.StringVar(value="-4")
         self.end_point = tk.StringVar(value="2")
-        self.steps = tk.StringVar(value="100")
+        self.steps = tk.StringVar(value="2")
         self.eps = tk.StringVar(value="1e-10")
 
         ttk.Style().configure('black/white.TButton', foreground='black')
@@ -93,7 +111,7 @@ class App(tk.Tk):
             # swap
             a, b = b, a
 
-        root_number, section, x, fx, iteractions, error = steff(f, a, b, eps)
+        root_number, section, x, fx, iteractions, error = steff_by_steps(f, a, b, eps, steps)
         self.root_number.set(root_number)
         self.section.set(section)
         self.x.set(x)
@@ -114,13 +132,15 @@ class App(tk.Tk):
         xs = [x for x in np.linspace(a, b, 100)]
         ys = []
         prev_y = f(xs[0])
+        prev_d2x = d2f(xs[0])
         for x in xs:
             y = f(x)
             ys.append(y)
-
-            if prev_y * y < 0:
+            d2x = d2f(x)
+            if (prev_d2x > 0 and d2x <= 0) or (prev_d2x < 0 and d2x >= 0):
                 plt.axvline(x=x, color="red")
             prev_y = y
+            prev_d2x = d2x
 
         ys = [f(x) for x in xs]
         ax.plot(xs, ys)
