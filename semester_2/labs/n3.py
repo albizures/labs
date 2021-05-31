@@ -7,7 +7,7 @@ import numpy as np
 
 
 def f(x):
-    return math.sin(x)
+    return math.sin(x) + 0.5
 
 
 def d2f(x):
@@ -110,7 +110,7 @@ class App(tk.Tk):
 
         self.create_headers()
 
-    def calculate(self):
+    def get_roots(self):
         a = float(self.start_point.get())
         b = float(self.end_point.get())
         eps = float(self.eps.get())
@@ -120,8 +120,10 @@ class App(tk.Tk):
             # swap
             a, b = b, a
 
-        results = steff_by_steps(f, a, b, eps, steps)
-        self.show_result(results)
+        return steff_by_steps(f, a, b, eps, steps)
+
+    def calculate(self):
+        self.show_result(self.get_roots())
 
     def quit(self, *args):
         self.destroy()
@@ -131,12 +133,18 @@ class App(tk.Tk):
         b = float(self.end_point.get())
         eps = float(self.eps.get())
         steps = float(self.steps.get())
+        roots = self.get_roots()
 
         fig, ax = plt.subplots()
         xs = [x for x in np.linspace(a, b, 100)]
         ys = []
         prev_y = f(xs[0])
         prev_d2x = d2f(xs[0])
+
+        for root in roots:
+            if root[2] != '':
+                plt.axvline(x=round(root[2], 2), color="green")
+
         for x in xs:
             y = f(x)
             ys.append(y)
